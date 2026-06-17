@@ -1,0 +1,1 @@
+ mongodump --db=mcri --uri="mongodb+srv://root:root@cluster0.8pmfqqn.mongodb.net/" --out=./dump

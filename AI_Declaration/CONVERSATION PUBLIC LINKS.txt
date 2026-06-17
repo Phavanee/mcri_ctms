@@ -1,0 +1,2 @@
+SCHEMA: https://chatgpt.com/share/6a276c5d-ac58-83ec-8bad-6ed0fe2b397d
+INGESTION: https://chatgpt.com/share/6a27adb4-597c-83ec-b5c9-d422d9f11241

@@ -1,0 +1,223 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://example.com/schemas/clinical-trials.json",
+    "title": "Clinical Trials",
+    "description": "A single clinical trial protocol record mirroring ClinicalTrials.gov NCT structure.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "trial_id",
+        "title",
+        "short_title",
+        "phase",
+        "status",
+        "sponsor",
+        "conditions",
+        "interventions",
+        "start_date",
+        "estimated_end_date",
+        "enrolment_target",
+        "enrolled_count",
+        "arms",
+        "primary_endpoint",
+        "secondary_endpoints",
+        "sites",
+        "ethical_approval",
+        "created_at"
+    ],
+    "properties": {
+        "trial_id": {
+            "type": "string",
+            "description": "Unique trial identifier in NCT format.",
+            "pattern": "^NCT-\\d{8}$",
+            "examples": [
+                "NCT-20240001"
+            ]
+        },
+        "title": {
+            "type": "string",
+            "description": "Full title of the trial.",
+            "minLength": 1
+        },
+        "short_title": {
+            "type": "string",
+            "description": "Abbreviated title.",
+            "maxLength": 80
+        },
+        "phase": {
+            "type": "string",
+            "enum": [
+                "Phase I",
+                "Phase II",
+                "Phase III",
+                "Phase IV",
+                "Not Applicable"
+            ]
+        },
+        "status": {
+            "type": "string",
+            "enum": [
+                "Recruiting",
+                "Active (not recruiting)",
+                "Completed",
+                "Terminated",
+                "Suspended",
+                "Withdrawn"
+            ]
+        },
+        "sponsor": {
+            "type": "string",
+            "description": "Name of the sponsoring organization.",
+            "minLength": 1,
+            "examples": [
+                "MCRI",
+                "PharmaCo Ltd"
+            ]
+        },
+        "conditions": {
+            "type": "array",
+            "description": "Medical conditions studied.",
+            "minItems": 1,
+            "maxItems": 4,
+            "items": {
+                "type": "string",
+                "minLength": 1
+            }
+        },
+        "interventions": {
+            "type": "array",
+            "description": "References to intervention_id values in the Interventions collection.",
+            "items": {
+                "type": "string",
+                "pattern": "^INT-\\d{6}$"
+            },
+            "uniqueItems": true
+        },
+        "start_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Trial start date (ISO 8601).",
+            "formatMinimum": "2018-01-01",
+            "formatMaximum": "2024-12-01"
+        },
+        "estimated_end_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Estimated trial end date (ISO 8601).",
+            "formatMinimum": "2020-01-01",
+            "formatMaximum": "2027-12-31"
+        },
+        "enrolment_target": {
+            "type": "integer",
+            "minimum": 30,
+            "maximum": 2000
+        },
+        "enrolled_count": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2000
+        },
+        "arms": {
+            "type": "array",
+            "description": "Study arms.",
+            "minItems": 1,
+            "maxItems": 4,
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "arm_label",
+                    "arm_type",
+                    "description"
+                ],
+                "properties": {
+                    "arm_label": {
+                        "type": "string",
+                        "minLength": 1,
+                        "examples": [
+                            "Arm A",
+                            "Arm B"
+                        ]
+                    },
+                    "arm_type": {
+                        "type": "string",
+                        "enum": [
+                            "Experimental",
+                            "Active Comparator",
+                            "Placebo Comparator",
+                            "No Intervention"
+                        ]
+                    },
+                    "description": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                }
+            }
+        },
+        "primary_endpoint": {
+            "type": "string",
+            "description": "Description of the primary endpoint.",
+            "minLength": 1,
+            "examples": [
+                "Overall survival at 12 months"
+            ]
+        },
+        "secondary_endpoints": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 5,
+            "items": {
+                "type": "string",
+                "minLength": 1
+            }
+        },
+        "sites": {
+            "type": "array",
+            "description": "Participating site identifiers.",
+            "items": {
+                "type": "string",
+                "examples": [
+                    "SITE-01",
+                    "SITE-02"
+                ]
+            },
+            "uniqueItems": true,
+            "minItems": 1
+        },
+        "ethical_approval": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "approval_id",
+                "committee",
+                "approved_on"
+            ],
+            "properties": {
+                "approval_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "examples": [
+                        "EC-4657"
+                    ]
+                },
+                "committee": {
+                    "type": "string",
+                    "minLength": 1,
+                    "examples": [
+                        "National Medical Ethics Board"
+                    ]
+                },
+                "approved_on": {
+                    "type": "string",
+                    "format": "date"
+                }
+            }
+        },
+        "created_at": {
+            "type": "string",
+            "format": "date",
+            "description": "Record creation timestamp (ISO 8601)."
+        }
+    }
+}

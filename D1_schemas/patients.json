@@ -1,0 +1,191 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://example.com/schemas/patients.json",
+    "title": "Patients",
+    "description": "De-identified clinical trial participant records.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "patient_id",
+        "name",
+        "date_of_birth",
+        "gender",
+        "ethnicity",
+        "blood_type",
+        "bmi",
+        "smoking_status",
+        "diagnosis",
+        "comorbidities",
+        "site_id",
+        "enrolled_trials",
+        "contact_info",
+        "created_at"
+    ],
+    "properties": {
+        "patient_id": {
+            "type": "string",
+            "description": "Unique patient identifier.",
+            "pattern": "^PT-\\d{6}$",
+            "examples": [
+                "PT-001023"
+            ]
+        },
+        "name": {
+            "type": "string",
+            "description": "Synthetic full name in Firstname Lastname format.",
+            "minLength": 1
+        },
+        "date_of_birth": {
+            "type": "string",
+            "format": "date",
+            "description": "Date of birth (ISO 8601) in YYYY-MM-DD format.",
+            "formatMinimum": "1940-01-01",
+            "formatMaximum": "2005-12-31"
+        },
+        "gender": {
+            "type": "string",
+            "enum": [
+                "Male",
+                "Female",
+                "Non-binary",
+                "Prefer not to say"
+            ]
+        },
+        "ethnicity": {
+            "type": "string",
+            "enum": [
+                "Malay",
+                "Chinese",
+                "Indian",
+                "Caucasian",
+                "African",
+                "Hispanic",
+                "Other"
+            ]
+        },
+        "blood_type": {
+            "type": "string",
+            "enum": [
+                "A+",
+                "A-",
+                "B+",
+                "B-",
+                "AB+",
+                "AB-",
+                "O+",
+                "O-"
+            ]
+        },
+        "bmi": {
+            "type": "number",
+            "description": "Body mass index.",
+            "minimum": 15.0,
+            "maximum": 45.0
+        },
+        "smoking_status": {
+            "type": "string",
+            "enum": [
+                "Never",
+                "Former",
+                "Current"
+            ]
+        },
+        "diagnosis": {
+            "type": "object",
+            "description": "Primary diagnosis details.",
+            "additionalProperties": false,
+            "required": [
+                "icd10_code",
+                "description",
+                "diagnosed_on"
+            ],
+            "properties": {
+                "icd10_code": {
+                    "type": "string",
+                    "description": "ICD-10 diagnosis code.",
+                    "minLength": 1,
+                    "examples": [
+                        "C50.9"
+                    ]
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Human-readable diagnosis label.",
+                    "minLength": 1,
+                    "examples": [
+                        "Malignant neoplasm of breast, unspecified"
+                    ]
+                },
+                "diagnosed_on": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Date of diagnosis (ISO 8601)."
+                }
+            }
+        },
+        "comorbidities": {
+            "type": "array",
+            "description": "ICD-10 code and label pairs for comorbid conditions.",
+            "minItems": 0,
+            "maxItems": 5,
+            "items": {
+                "type": "string",
+                "minLength": 1,
+                "examples": [
+                    "E11.9 - Type 2 diabetes mellitus without complications"
+                ]
+            }
+        },
+        "site_id": {
+            "type": "string",
+            "description": "Participating clinical site identifier.",
+            "examples": [
+                "SITE-01",
+                "SITE-02"
+            ]
+        },
+        "enrolled_trials": {
+            "type": "array",
+            "description": "Trial identifiers the patient is enrolled in.",
+            "minItems": 1,
+            "maxItems": 3,
+            "items": {
+                "type": "string",
+                "pattern": "^NCT-\\d{8}$"
+            },
+            "uniqueItems": true
+        },
+        "contact_info": {
+            "type": "object",
+            "description": "Synthetic contact details.",
+            "additionalProperties": false,
+            "required": [
+                "email",
+                "phone",
+                "emergency_contact"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Synthetic email address."
+                },
+                "phone": {
+                    "type": "string",
+                    "description": "Synthetic phone number.",
+                    "minLength": 1
+                },
+                "emergency_contact": {
+                    "type": "string",
+                    "description": "Synthetic emergency contact name.",
+                    "minLength": 1
+                }
+            }
+        },
+        "created_at": {
+            "type": "string",
+            "format": "date",
+            "description": "Record creation timestamp (ISO 8601)."
+        }
+    }
+}

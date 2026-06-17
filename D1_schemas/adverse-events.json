@@ -1,0 +1,213 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://example.com/schemas/adverse-events.json",
+    "title": "Adverse Events",
+    "description": "A single adverse event reported for a patient during a trial. Grading follows CTCAE v5.0.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "ae_id",
+        "patient_id",
+        "trial_id",
+        "intervention_id",
+        "event_name",
+        "system_organ_class",
+        "ctcae_grade",
+        "onset_date",
+        "resolution_date",
+        "outcome",
+        "serious",
+        "action_taken",
+        "causality",
+        "lab_values",
+        "reported_by",
+        "created_at"
+    ],
+    "properties": {
+        "ae_id": {
+            "type": "string",
+            "description": "Unique adverse event identifier.",
+            "pattern": "^AE-\\d{8}$",
+            "examples": [
+                "AE-00000001"
+            ]
+        },
+        "patient_id": {
+            "type": "string",
+            "description": "Reference to a patient in the patients collection.",
+            "pattern": "^PT-\\d{6}$",
+            "examples": [
+                "PT-000001"
+            ]
+        },
+        "trial_id": {
+            "type": "string",
+            "description": "Reference to a trial in the trials collection.",
+            "pattern": "^NCT-\\d{8}$",
+            "examples": [
+                "NCT-20240005"
+            ]
+        },
+        "intervention_id": {
+            "type": "string",
+            "description": "Reference to an intervention in the interventions collection.",
+            "pattern": "^INT-\\d{6}$",
+            "examples": [
+                "INT-000010"
+            ]
+        },
+        "event_name": {
+            "type": "string",
+            "description": "MedDRA-style adverse event term.",
+            "minLength": 1,
+            "examples": [
+                "Neutropenia",
+                "Nausea",
+                "Elevated ALT",
+                "Rash maculopapular"
+            ]
+        },
+        "system_organ_class": {
+            "type": "string",
+            "description": "MedDRA-style term.",
+            "minLength": 1,
+            "examples": [
+                "Blood and lymphatic system disorders",
+                "Gastrointestinal disorders",
+                "Nervous system disorders",
+                "Hepatobiliary disorders",
+                "Skin and subcutaneous tissue disorders"
+            ]
+        },
+        "ctcae_grade": {
+            "type": "integer",
+            "description": "CTCAE v5.0 severity grade: 1 (Mild), 2 (Moderate), 3 (Severe), 4 (Life-threatening), 5 (Fatal).",
+            "enum": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+        },
+        "onset_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date of adverse event onset (ISO 8601). Must be after patient enrolment."
+        },
+        "resolution_date": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "format": "date",
+            "description": "Date the event resolved (ISO 8601). Null if ongoing."
+        },
+        "outcome": {
+            "type": "string",
+            "enum": [
+                "Resolved",
+                "Resolving",
+                "Not resolved",
+                "Fatal",
+                "Unknown"
+            ]
+        },
+        "serious": {
+            "type": "boolean",
+            "description": "True if ctcae_grade >= 3 or hospitalisation was required."
+        },
+        "action_taken": {
+            "type": "string",
+            "enum": [
+                "None",
+                "Dose reduced",
+                "Dose interrupted",
+                "Drug withdrawn",
+                "Supportive care",
+                "Other"
+            ]
+        },
+        "causality": {
+            "type": "string",
+            "enum": [
+                "Unrelated",
+                "Unlikely",
+                "Possible",
+                "Probable",
+                "Definite"
+            ]
+        },
+        "lab_values": {
+            "type": [
+                "object",
+                "null"
+            ],
+            "description": "Associated laboratory result. Null if no lab data exists.",
+            "additionalProperties": false,
+            "required": [
+                "test_name",
+                "value",
+                "unit",
+                "reference_range"
+            ],
+            "properties": {
+                "test_name": {
+                    "type": "string",
+                    "description": "Laboratory test name.",
+                    "minLength": 1,
+                    "examples": [
+                        "ANC",
+                        "ALT",
+                        "IL-6",
+                        "CRP"
+                    ]
+                },
+                "value": {
+                    "type": "number",
+                    "description": "Measured laboratory value.",
+                    "examples": [
+                        3.34,
+                        64.87,
+                        270.65
+                    ]
+                },
+                "unit": {
+                    "type": "string",
+                    "description": "Unit of measurement.",
+                    "minLength": 1,
+                    "examples": [
+                        "x10^9/L",
+                        "U/L",
+                        "pg/mL",
+                        "mg/L"
+                    ]
+                },
+                "reference_range": {
+                    "type": "string",
+                    "description": "Normal reference range for the test.",
+                    "minLength": 1,
+                    "examples": [
+                        "1.8–7.0 x10^9/L",
+                        "7–56 U/L",
+                        "< 7 pg/mL"
+                    ]
+                }
+            }
+        },
+        "reported_by": {
+            "type": "string",
+            "enum": [
+                "Investigator",
+                "Patient",
+                "Nurse",
+                "Sponsor"
+            ]
+        },
+        "created_at": {
+            "type": "string",
+            "format": "date",
+            "description": "Record creation timestamp (ISO 8601)."
+        }
+    }
+}

@@ -1,0 +1,172 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://example.com/schemas/interventions.json",
+    "title": "Interventions",
+    "description": "Therapeutic interventions administered within a clinical trial arm.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "intervention_id",
+        "trial_id",
+        "arm_label",
+        "name",
+        "type",
+        "mechanism",
+        "dosage",
+        "duration_weeks",
+        "target_gene",
+        "regulatory_status",
+        "created_at"
+    ],
+    "properties": {
+        "intervention_id": {
+            "type": "string",
+            "description": "Unique intervention identifier.",
+            "pattern": "^INT-\\d{6}$",
+            "examples": [
+                "INT-000001"
+            ]
+        },
+        "trial_id": {
+            "type": "string",
+            "description": "Reference to a trial in the trials collection.",
+            "pattern": "^NCT-\\d{8}$",
+            "examples": [
+                "NCT-20240001"
+            ]
+        },
+        "arm_label": {
+            "type": "string",
+            "description": "Must match an arm_label in the parent trial document.",
+            "minLength": 1,
+            "examples": [
+                "Arm A",
+                "Arm B"
+            ]
+        },
+        "name": {
+            "type": "string",
+            "description": "Generic or brand name of the intervention.",
+            "minLength": 1,
+            "examples": [
+                "Pembrolizumab",
+                "Placebo saline",
+                "Metformin 500mg"
+            ]
+        },
+        "type": {
+            "type": "string",
+            "enum": [
+                "Drug",
+                "Biologic",
+                "Device",
+                "Procedure",
+                "Dietary Supplement",
+                "Placebo",
+                "Other"
+            ]
+        },
+        "mechanism": {
+            "type": "string",
+            "description": "Short description of the mechanism of action.",
+            "minLength": 1,
+            "examples": [
+                "PD-1 checkpoint inhibitor"
+            ]
+        },
+        "dosage": {
+            "type": [
+                "object",
+                "null"
+            ],
+            "description": "Dosage and administration details. Null when not applicable, as some interventions can be control groups.",
+            "additionalProperties": false,
+            "required": [
+                "unit",
+                "frequency",
+                "route"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "number",
+                    "description": "Dosage amount.",
+                    "examples": [
+                        200,
+                        500,
+                        75
+                    ]
+                },
+                "unit": {
+                    "type": "string",
+                    "enum": [
+                        "mg",
+                        "mg/kg",
+                        "IU",
+                        "mL"
+                    ]
+                },
+                "frequency": {
+                    "type": "string",
+                    "enum": [
+                        "Once daily",
+                        "Twice daily",
+                        "Weekly",
+                        "Biweekly",
+                        "Monthly"
+                    ]
+                },
+                "route": {
+                    "type": "string",
+                    "enum": [
+                        "Oral",
+                        "Intravenous",
+                        "Subcutaneous",
+                        "Intramuscular",
+                        "Topical"
+                    ]
+                }
+            }
+        },
+        "duration_weeks": {
+            "type": "integer",
+            "description": "Treatment duration in weeks.",
+            "minimum": 1,
+            "maximum": 104
+        },
+        "target_gene": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "description": "HGNC gene symbol. Null if not applicable.",
+            "examples": [
+                "EGFR",
+                "BRCA1",
+                "PD-L1"
+            ]
+        },
+        "target_protein": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "description": "UniProt-style protein name. Null if not applicable.",
+            "examples": [
+                "Programmed cell death protein 1 (PD-1)"
+            ]
+        },
+        "regulatory_status": {
+            "type": "string",
+            "enum": [
+                "Approved",
+                "Investigational",
+                "Compassionate Use"
+            ]
+        },
+        "created_at": {
+            "type": "string",
+            "format": "date",
+            "description": "Record creation timestamp (ISO 8601)."
+        }
+    }
+}
